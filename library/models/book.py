@@ -9,7 +9,7 @@ class BookModel(models.Model):
     gender = models.CharField(max_length=150)
     publish_date = models.DateField(null=True)
     checkin_date = models.DateField(auto_now_add=True)
-    is_avaiable = models.BooleanField()
+    is_available = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         status = "Disponível" if self.is_avaiable else "Reservado"
