@@ -78,6 +78,5 @@ No desenvolvimento do sistema de gestão de biblioteca, utilizaremos o board do 
 - ***Done:*** Tarefas revisadas e aprovadas, integradas ao projeto.
 
 ## Desenvolvedores
-- [@RafaelRodrigues44](https://github.com/RafaelRodrigues44)
 - [@camiyuka](https://github.com/camiyuka)
 - [@AnaJuliaMM](https://github.com/AnaJuliaMM)
