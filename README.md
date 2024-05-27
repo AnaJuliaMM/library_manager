@@ -45,7 +45,7 @@ No sistema de gestão de biblioteca, o Model manipula usuários, livros e reserv
 - *author:* Autor do livro.
 - *publish_date:* Data de publicação.
 - *gender:* Gênero literário do livro.
-- *isAvaiable:* Indica se o livro está disponível ou reservado.
+- *isAvailable:* Indica se o livro está disponível ou reservado.
 - *checkin_date:* Data em que o livro foi adicionado ao sistema.
 
 ***Reservation***
