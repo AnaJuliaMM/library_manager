@@ -1,8 +1,7 @@
 from rest_framework import viewsets
 from django.shortcuts import render
-
-from ..models import BookModel
-from ..serializers import BookSerializer
+from ..models.book import BookModel
+from ..serializers.book import BookSerializer
 
 class BookViewSet (viewsets.ModelViewSet):
     queryset = BookModel.objects.all()
