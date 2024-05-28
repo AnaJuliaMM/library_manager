@@ -43,9 +43,10 @@ No sistema de gestão de biblioteca, o Model manipula usuários, livros e reserv
 - *id:* Identificador único do livro.
 - *title:* Título do livro.
 - *author:* Autor do livro.
+- *publisher:* editora do livro.
 - *publish_date:* Data de publicação.
 - *gender:* Gênero literário do livro.
-- *isAvaiable:* Indica se o livro está disponível ou reservado.
+- *is_available:* Indica se o livro está disponível ou reservado.
 - *checkin_date:* Data em que o livro foi adicionado ao sistema.
 
 ***Reservation***
