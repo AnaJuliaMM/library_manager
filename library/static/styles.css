@@ -1,6 +1,10 @@
 :root {
   --darkest-blue: #122640;
   --light-pink: #f4abd7;
+  --white: #FAFAFA;
+  --white-hover: #dbdbdb;
+  --purple: #422483;
+  --lilac: #B298DC;
 }
 * {
   margin: 0;
@@ -42,7 +46,7 @@ body {
   transition: color 0.3s ease;
 }
 .nav-ul li:hover {
-  background-color: rgba(156, 156, 156, 0.48);
+  background-color: var(--white-hover);
   cursor: pointer;
 }
 .nav-ul a {
@@ -53,7 +57,9 @@ body {
 main {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 80vw;
+  overflow-y: auto;
+
 }
 .library-header {
   display: flex;
@@ -79,7 +85,6 @@ main {
 }
 .filter-div input[type="text"] {
   border: 1.5px solid #d6d3d3;
-  color: var(--darkest-blue);
   width: 30vw;
   padding: 0 5px;
 }
@@ -98,5 +103,39 @@ main {
 }
 .filter-div input[type="button"]:hover {
   background-color: rgb(234, 106, 183);
+  cursor: pointer;
+}
+
+.books-list-div{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  padding: 20px;
+}
+.book-card{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  padding: 30px;
+  background-color: var(--darkest-blue);
+  color: var(--white);
+}
+.see-description-btn{
+  color:var(--lilac);
+  cursor: pointer;
+}
+.borrow-btn{
+  background-color: var(--white);
+  color: var(--purple);
+  border: none;
+  padding: 9px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.borrow-btn:hover{
+  background-color: var(--white-hover);
   cursor: pointer;
 }
