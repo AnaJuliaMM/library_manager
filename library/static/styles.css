@@ -1,10 +1,11 @@
 :root {
   --darkest-blue: #122640;
   --light-pink: #f4abd7;
-  --white: #FAFAFA;
+  --white: #fafafa;
   --white-hover: #dbdbdb;
   --purple: #422483;
-  --lilac: #B298DC;
+  --lilac: #b298dc;
+  --light-gray: #c4c4c4;
 }
 * {
   margin: 0;
@@ -22,7 +23,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #c4c4c4;
+  background-color: var(--light-gray);
   padding: 20px;
   width: 20vw;
 }
@@ -59,7 +60,6 @@ main {
   flex-direction: column;
   width: 80vw;
   overflow-y: auto;
-
 }
 .library-header {
   display: flex;
@@ -106,36 +106,81 @@ main {
   cursor: pointer;
 }
 
-.books-list-div{
+.books-list-div {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
   padding: 20px;
 }
-.book-card{
+.book-card {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   border-radius: 5px;
-  padding: 30px;
+  padding: 20px 0px;
+  font-size: 0.8rem;
   background-color: var(--darkest-blue);
   color: var(--white);
 }
-.see-description-btn{
-  color:var(--lilac);
-  cursor: pointer;
+.book-card-header {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
-.borrow-btn{
-  background-color: var(--white);
+.gender-menu-card{
+  display: flex;
+  justify-content: space-between;
+  width: -webkit-fill-available;
+  padding: 0px 20px;
+}
+.edit-delete-div{
+  display: flex;
+  gap: 10px;
+}
+.gender-p {
+  background-color: var(--light-pink);
+  color: var(--darkest-blue);
+  align-self: flex-end;
+  border-radius: 5px 0px;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.book-title-div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.borrow-btn {
+  background-color: var(--lilac);
   color: var(--purple);
   border: none;
   padding: 9px 20px;
   border-radius: 5px;
   cursor: pointer;
 }
-.borrow-btn:hover{
+.borrow-btn:hover {
   background-color: var(--white-hover);
   cursor: pointer;
+}
+.description-div {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 15px;
+  background-color: var(--white);
+  color: var(--darkest-blue);
+  font-size: 0.7rem;
+  border-left: solid 2px var(--light-gray);
+  border-right: solid 2px var(--light-gray);
+}
+.description-div ul {
+  list-style: none;
+}
+.detail-div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
