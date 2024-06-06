@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
     <title>Acervo</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
   </head>
   <body>
     <nav class="library-nav">
@@ -65,7 +67,8 @@
         </div>
       </header>
       <section class="books-list-div">
-      
+        
+        {% for book in books %}
         <div class="book-card">
           <div class="gender-menu-card">
             <div class="edit-delete-div">
@@ -81,7 +84,7 @@
                   </svg>
               </figure>
             </div>
-            <p class="gender-p">Gênero</p>
+            <p class="gender-p">{{book.gender}}</p>
           </div>
           <div class="book-card-header">
             <figure>
@@ -98,8 +101,8 @@
               </svg>
             </figure>
             <div class="book-title-div">
-              <h2>Título</h2>
-              <h4>Autor</h3>
+              <h2>{{ book.title }}</h2>
+              <h4>{{ book.author }}</h3>
             </div>
           </div> 
           <div class="description-div">
@@ -107,10 +110,10 @@
               <h4>Detalhes</h4>
               <hr>
               <ul>
-                <li>Páginas:</li>
-                <li>Editora:</li>
-                <li>Data de Publicação:</li>
-                <li>Data de Registro:</li>
+                <li>Páginas: {{book.gender}}</li>
+                <li>Editora: {{book.publisher}}</li>
+                <li>Data de Publicação: {{book.publish_date}}</li>
+                <li>Data de Registro: {{book.checkin_date}}</li>
               </ul>
             </div>
             <div class="detail-div">
@@ -121,10 +124,11 @@
               </p>
             </div>
             
-            
           </div>
           <input class="borrow-btn" type="button" value="Emprestar :)" />
         </div>
+        {% endfor %}
+
        
       </section>
     </main>
