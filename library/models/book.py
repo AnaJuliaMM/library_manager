@@ -7,6 +7,7 @@ class BookModel(models.Model):
     author = models.CharField(max_length=150)
     publisher = models.CharField(max_length=150)
     gender = models.CharField(max_length=150)
+    pages = models.IntegerField()
     publish_date = models.DateField(null=True)
     checkin_date = models.DateField(auto_now_add=True)
     is_available = models.BooleanField(default=True)
