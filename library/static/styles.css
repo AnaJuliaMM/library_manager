@@ -129,15 +129,18 @@ main {
   justify-content: center;
   gap: 20px;
 }
-.gender-menu-card{
+.gender-menu-card {
   display: flex;
   justify-content: space-between;
   width: -webkit-fill-available;
   padding: 0px 20px;
 }
-.edit-delete-div{
+.edit-delete-div {
   display: flex;
   gap: 10px;
+}
+.edit-delete-div figure {
+  cursor: pointer;
 }
 .gender-p {
   background-color: var(--light-pink);
