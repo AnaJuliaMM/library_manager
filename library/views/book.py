@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from ..models.book import BookModel
 from ..serializers.book import BookSerializer
 from ..forms.create_book import BookForm
@@ -21,3 +21,10 @@ class CreateBookView (viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         form = BookForm()
         return render(request, 'createBook.html', { "form": form})
+    
+    def create(self, request, *args, **kwargs):
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list-books')
+        return render(request, 'createBook.html', {'form': form})
