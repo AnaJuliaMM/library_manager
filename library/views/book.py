@@ -25,6 +25,9 @@ class CreateBookView (viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         form = BookForm(request.POST)
         if form.is_valid():
+          
             form.save()
-            return redirect('list-books')
-        return render(request, 'createBook.html', {'form': form})
+            return redirect('books-list')
+        errors = form.errors
+        print(errors)
+        return render(request, 'createBook.html', {'form': form, 'errors': errors})

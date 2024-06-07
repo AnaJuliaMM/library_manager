@@ -13,3 +13,6 @@ class BookForm(forms.ModelForm):
                     'pages': 'Número de Páginas',
                     'publish_date': 'Data de Publicação',
                 }
+        widgets = {
+            'publish_date': forms.DateInput(attrs={'type': 'date'}),
+        }

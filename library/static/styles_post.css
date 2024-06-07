@@ -6,6 +6,8 @@
   --purple: #422483;
   --lilac: #b298dc;
   --light-gray: #c4c4c4;
+  --light-red: #f3a9a9;
+  --error-red: #7e1010;
 }
 * {
   margin: 0;
@@ -66,4 +68,13 @@ body {
   background-color: var(--purple);
   color: var(--white);
   cursor: pointer;
+}
+.form-errors {
+  display: flex;
+  padding: 5px;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  width: fit-content;
+  background-color: var(--light-red);
+  color: var(--error-red);
 }
