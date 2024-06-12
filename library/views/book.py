@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.shortcuts import render, redirect,get_object_or_404
 from ..models.book import BookModel
 from ..serializers.book import BookSerializer
-from ..forms.create_book import BookForm
+from ..forms.book import BookForm
 from ..repository import BookRepository
 
 from django.views.generic import TemplateView
@@ -56,6 +56,37 @@ class DeleteBookView(TemplateView):
         repository = BookRepository()
         success = repository.delete_book(book_id)
         if success:
-            return redirect('list_books')
-        return redirect('list_books')
+            return redirect('books-list')
+        return redirect('books-list')
         # return HttpResponse(status=405)
+
+
+class EditBookView(TemplateView):
+    template_name = 'updateBook.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book_id = kwargs.get('pk')
+        book = get_object_or_404(BookModel, pk=book_id)
+
+        serializer = BookSerializer(book)
+        serialized_data = serializer.data
+        print(serialized_data)
+        form = BookForm(instance=book)
+        print(form)
+        context['book'] = serialized_data  
+        context['form'] = form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        book_id = kwargs.get('pk')
+        repository = BookRepository()
+        book = repository.get_book_by_id(book_id)
+        if book:
+            form = BookForm(request.POST, instance=book)
+            if form.is_valid():
+                form.save()
+                return redirect('books-list')
+        return redirect('books-list')
+        # return HttpResponse(status=405)
+ 

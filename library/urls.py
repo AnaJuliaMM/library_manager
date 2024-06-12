@@ -9,5 +9,7 @@ router.register(r'create', CreateBookView, basename="book")
 
 urlpatterns = [
     path('', include(router.urls)),
-    path(r'delete/<str:pk>', DeleteBookView.as_view(),  name="delete-book" )
+    path(r'delete/<str:pk>', DeleteBookView.as_view(),  name="delete-book" ),
+    path(r'update/<str:pk>', EditBookView.as_view(),  name="update-book" )
+
 ]
