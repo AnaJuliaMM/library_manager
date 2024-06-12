@@ -128,6 +128,10 @@ main {
   display: flex;
   justify-content: center;
   gap: 20px;
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  white-space: normal; 
+  text-overflow: ellipsis; 
 }
 .gender-menu-card {
   display: flex;
@@ -186,4 +190,48 @@ main {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+.verify-delete {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: -webkit-fill-available;
+  background-color: var(--white-hover);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  padding: 20px;
+  gap: 10px;
+  margin: 10px;
+}
+.verify-title {
+  font-weight: 700;
+  font-size: .9rem;
+}
+.verify-delete form {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+.verify-delete button,
+.verify-delete a {
+  display: flex;
+  flex-direction: column;
+  padding: 7px;
+  font-size: 0.7rem;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+.verify-delete button {
+  color: var(--darkest-blue);
+  border: solid 2px var(--light-pink);
+}
+.verify-delete a {
+  color: var(--darkest-blue);
+  background-color: var(--light-pink);
+  border: solid 3px var(--light-pink);
+}
+.book-record {
+  font-weight: 700;
 }
