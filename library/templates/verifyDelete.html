@@ -1,0 +1,17 @@
+{% extends "books.html" %} {% block title %}Confirmar Deleção{% endblock %} 
+
+{% block content %}
+<div class="verify-delete">
+  <p class="verify-title">Confirmar deleção</p>
+  <p class="verify-p">
+    Tem certeza que deseja deletar
+    <span class="book-record">"{{ book }}"</span>?
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar</button>
+    <a href="{% url 'books-list' %}">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
