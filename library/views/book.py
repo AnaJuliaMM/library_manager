@@ -1,16 +1,16 @@
 from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.response import Response
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from ..models.book import BookModel
 from ..serializers.book import BookSerializer
 from ..forms.create_book import BookForm
 from ..repository import BookRepository
 
-from django.urls import reverse_lazy
-from django.views.generic import DeleteView
+from django.views.generic import TemplateView
 
 
+# Mudar para função
 class GenericBookView(viewsets.ModelViewSet):
     queryset = BookModel.objects.all()
     serializer_class = BookSerializer
@@ -20,7 +20,8 @@ class GenericBookView(viewsets.ModelViewSet):
         books = BookRepository().get_all_books()
         serialized_books = self.serializer_class(books, many=True)
         return render(request, 'books.html', {"books": serialized_books.data })
-        
+
+# Mudar para função        
 class CreateBookView(viewsets.ModelViewSet):
     queryset = BookModel.objects.all()
     serializer_class = BookSerializer
@@ -39,14 +40,22 @@ class CreateBookView(viewsets.ModelViewSet):
         errors = form.errors
         return render(request, 'createBook.html', {'form': form, 'errors': errors})
 
-def delete_instance(request, id):
-    if request.method == 'GET':
-        BookRepository().delete_book(id)
-        return redirect('books-list')
-    return HttpResponse(status=405)
 
-class DeleteView(DeleteView):
-    model = BookModel
+class DeleteBookView(TemplateView):
     template_name = 'verifyDelete.html'
-    success_url = reverse_lazy('books-list')  
-    print("aa")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book_id = kwargs.get('pk')
+        book = get_object_or_404(BookModel, pk=book_id)
+        context['book'] = book
+        return context
+
+    def post(self, request, *args, **kwargs):
+        book_id = kwargs.get('pk')
+        repository = BookRepository()
+        success = repository.delete_book(book_id)
+        if success:
+            return redirect('list_books')
+        return redirect('list_books')
+        # return HttpResponse(status=405)

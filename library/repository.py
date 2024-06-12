@@ -5,7 +5,10 @@ class BookRepository:
         return BookModel.objects.all()
 
     def get_book_by_id(self, book_id):
-        return BookModel.objects.get(id=book_id)
+        try:
+            return BookModel.objects.get(id=book_id)
+        except BookModel.DoesNotExist:
+            return None
 
     def create_book(self, title, author, publisher, gender, pages, publish_date, checkin_date=None, is_available=True):
         return BookModel.objects.create(
@@ -34,4 +37,7 @@ class BookRepository:
 
     def delete_book(self, book_id):
         book = self.get_book_by_id(book_id)
-        book.delete()
+        if book:
+            book.delete()
+            return True
+        return False
