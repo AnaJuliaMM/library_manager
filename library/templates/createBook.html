@@ -12,7 +12,7 @@
     <main class="post-record-div">
       <h1>Cadastrar Livro</h1>
 
-      <form action="{% url 'book-list' %}" method="post">
+      <form action="{% url 'create-book' %}" method="post">
         {% csrf_token %} {% for field in form %}
         <div class="form-field-div">
           <label for="{{ field.id_for_label }}">{{ field.label }}</label>

@@ -10,13 +10,14 @@ class BookRepository:
         except BookModel.DoesNotExist:
             return None
 
-    def create_book(self, title, author, publisher, gender, pages, publish_date, checkin_date=None, is_available=True):
+    def create_book(self, title, author, publisher, gender, pages, publish_date, synopsis, checkin_date=None, is_available=True):
         return BookModel.objects.create(
             title=title,
             author=author,
             publisher=publisher,
             gender=gender,
             pages=pages,
+            synopsis=synopsis,
             publish_date=publish_date,
             checkin_date=checkin_date,
             is_available=is_available

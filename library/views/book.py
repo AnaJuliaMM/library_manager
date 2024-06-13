@@ -1,44 +1,43 @@
-from django.http import HttpResponse
-from rest_framework import viewsets
-from rest_framework.response import Response
 from django.shortcuts import render, redirect,get_object_or_404
+from django.views.generic import TemplateView
+from django.views import View
+
 from ..models.book import BookModel
 from ..serializers.book import BookSerializer
 from ..forms.book import BookForm
 from ..repository import BookRepository
 
-from django.views.generic import TemplateView
 
+class ListBookView(TemplateView):
+    template_name = 'books.html'
 
-# Mudar para função
-class GenericBookView(viewsets.ModelViewSet):
-    queryset = BookModel.objects.all()
-    serializer_class = BookSerializer
-    http_method_names = ['get', 'delete']
-
-    def list(self, request, *args, **kwargs):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         books = BookRepository().get_all_books()
-        serialized_books = self.serializer_class(books, many=True)
-        return render(request, 'books.html', {"books": serialized_books.data })
+        serialized_books = BookSerializer(books, many=True)
+        context['books'] = serialized_books.data
+        return context
 
-# Mudar para função        
-class CreateBookView(viewsets.ModelViewSet):
-    queryset = BookModel.objects.all()
-    serializer_class = BookSerializer
-    http_method_names = ['get', 'post']
 
-    def list(self, request, *args, **kwargs):
-        form = BookForm()
-        return render(request, 'createBook.html', {"form": form})
-    
-    def create(self, request, *args, **kwargs):
+class CreateBookView(TemplateView):
+    template_name = 'createBook.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = BookForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
         form = BookForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             BookRepository().create_book(**data)
             return redirect('books-list')
-        errors = form.errors
-        return render(request, 'createBook.html', {'form': form, 'errors': errors})
+        else:
+            context = self.get_context_data(**kwargs)
+            context['form'] = form
+            context['errors'] = form.errors
+            return self.render_to_response(context)
 
 
 class DeleteBookView(TemplateView):
@@ -59,7 +58,6 @@ class DeleteBookView(TemplateView):
             return redirect('books-list')
         return redirect('books-list')
         # return HttpResponse(status=405)
-
 
 class EditBookView(TemplateView):
     template_name = 'updateBook.html'

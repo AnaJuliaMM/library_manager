@@ -38,7 +38,7 @@
         </figure>
         <ul class="nav-ul">
           <a href=""><li>Acervo</li></a>
-          <a href="{% url 'book-list' %}"><li>Registrar livro</li></a>
+          <a href="{% url 'create-book' %}"><li>Registrar livro</li></a>
           <a href=""><li>Usuários</li></a>
           <a href=""><li>Registrar usuários</li></a>
         </ul>
@@ -149,10 +149,7 @@
               <h4>Sinopse</h4>
               <hr />
               <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Doloremque, odio veritatis perspiciatis deleniti beatae
-                voluptates dolor eos non soluta inventore minima minus aliquam
-                voluptas tenetur! Sapiente maxime eum quasi modi.
+                {{book.synopsis}}
               </p>
             </div>
           </div>
