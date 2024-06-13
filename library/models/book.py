@@ -13,5 +13,4 @@ class BookModel(models.Model):
     is_available = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        status = "Disponível" if self.is_available else "Reservado"
-        return f"{self.title} escrito por {self.author} (Publicado por {self.publisher} em {self.publish_date}) - {status.upper()}"
+        return f"{self.title}, escrito por {self.author} (Publicado por {self.publisher} em {self.publish_date})"
