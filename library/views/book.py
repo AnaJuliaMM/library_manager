@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.views.generic import TemplateView
 from django.views import View
+from django.http.response import HttpResponse
+from django.contrib import messages
+
 
 from ..models.book import BookModel
 from ..serializers.book import BookSerializer
@@ -31,13 +34,19 @@ class CreateBookView(TemplateView):
         form = BookForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            BookRepository().create_book(**data)
-            return redirect('books-list')
-        else:
-            context = self.get_context_data(**kwargs)
-            context['form'] = form
-            context['errors'] = form.errors
-            return self.render_to_response(context)
+            serializer = BookSerializer(data=data)
+            if  serializer.is_valid():
+                BookRepository().create_book(**data)
+                return redirect('books-list')
+            else:
+                context = self.get_context_data(**kwargs)
+                context['form'] = form
+                context['serializer_errors'] = serializer.errors
+                return self.render_to_response(context)
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        context['errors'] = form.errors 
+        return self.render_to_response(context)
 
 
 class DeleteBookView(TemplateView):
