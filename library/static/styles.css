@@ -177,6 +177,7 @@ main {
   flex-direction: column;
   gap: 18px;
   padding: 15px;
+  width: -webkit-fill-available;
   background-color: var(--white);
   color: var(--darkest-blue);
   font-size: 0.7rem;
