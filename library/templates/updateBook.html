@@ -17,7 +17,7 @@
             <div class="form-field-div">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {% if field.name == 'publish_date' %}
-                    <input type="date" name="{{ field.name }}" value="{{ book.publish_date|date:'Y-m-d' }}" required id="{{ field.id_for_label }}">
+                    <input type="date" name="{{ field.name }}" value="{{book.publish_date}}" required id="{{ field.id_for_label }}">
                 {% else %}
                     {{ field }}
                 {% endif %}
