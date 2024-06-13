@@ -51,6 +51,7 @@ body {
   background-color: var(--white-hover);
   border: none;
   border-radius: 5px;
+  padding: 5px;
 }
 .submit-btn {
   display: flex;
