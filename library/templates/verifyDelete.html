@@ -1,22 +1,14 @@
-<<<<<<< HEAD
 {% extends "books.html" %} 
 
 {% block title %}Confirmar Deleção{% endblock %} 
-=======
-{% extends "books.html" %} {% block title %}Confirmar Deleção{% endblock %} 
->>>>>>> 67cfb1c59c6599135440ebc48f8bca2c3cb36e39
 
 {% block content %}
 <div class="verify-delete">
   <p class="verify-title">Confirmar deleção</p>
   <p class="verify-p">
     Tem certeza que deseja deletar
-<<<<<<< HEAD
     <span class="book-record"
       >"{{ book.title }} ({{book.author}}) - Editora: {{book.publisher}} ({{book.publish_date}})"</span>?
-=======
-    <span class="book-record">"{{ book.title }} ({{book.author}}) - Editora: {{book.publisher}}(book.publish_date)"</span>?
->>>>>>> 67cfb1c59c6599135440ebc48f8bca2c3cb36e39
   </p>
 
   <form method="post">
@@ -25,8 +17,4 @@
     <a href="{% url 'books-list' %}">Cancelar</a>
   </form>
 </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 67cfb1c59c6599135440ebc48f8bca2c3cb36e39
 {% endblock %}
