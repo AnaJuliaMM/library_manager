@@ -10,7 +10,7 @@ class BookModel(models.Model):
     pages = models.IntegerField()
     publish_date = models.DateField(null=True)
     checkin_date = models.DateField(auto_now_add=True)
-    synopsis = models.TextField(max_length=250)
+    synopsis = models.TextField(max_length=2000)
     is_available = models.BooleanField(default=True)
 
     def __str__(self) -> str:
