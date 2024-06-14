@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+</head>
+<body>
+    <div class="main">
+        <div class="logo">
+            <img src="{% static 'src/logo.png' %}" alt="logo de livros e brilhinho">
+            <h1>Faça seu Login:</h1>
+        </div>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="inputs">
+                {{ form.username }}
+                {{ form.password }}
+            </div>
+            <div class="clickable">
+                <button type="submit">Entrar</button>
+            </div>
+            {% if form.errors %}
+                <div class="errors">
+                    <p>Seu usuário e senha não bateram. Tente novamente.</p>
+                </div>
+            {% endif %}
+            {% if next %}
+                {% if user.is_authenticated %}
+                    <div class="errors">
+                        <p>Sua conta não tem acesso a essa página. Para continuar, faça login com outra conta.</p>
+                    </div>
+                {% else %}
+                    <div class="errors">
+                        <p>Por favor, faça login para acessar essa página.</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>
