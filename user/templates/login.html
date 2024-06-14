@@ -4,23 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login.css' %}">
 </head>
 <body>
-    <link rel="stylesheet" href="../statics/css/login.css">
-
     <div class="main">
         <div class="logo">
-            <img src="../statics/src/logo.png" alt="logo de livros e brilhinho">
+            <img src="{% static 'src/logo.png' %}" alt="logo de livros e brilhinho">
             <h1>Faça seu Login:</h1>
         </div>
-        <div class="inputs">
-            <input type="text" name="nome" placeholder="Digite seu nome">
-            <input type="password" name="senha" placeholder="Digite sua senha">
-        </div>
-        <div class="clickable">
-         <button type="button" >Entrar</button>
-        </div>
+        <form method="post" action="{% url 'user-login' %}">
+            {% csrf_token %}
+            <div class="inputs">
+                {{ form.username }}
+                {{ form.password }}
+            </div>
+            <div class="clickable">
+                <button type="submit">Entrar</button>
+            </div>
+            {% if errors %}
+                <div class="errors">
+                    <p>{{ errors }}</p>
+                </div>
+            {% endif %}
+        </form>
     </div>
-    
 </body>
 </html>
