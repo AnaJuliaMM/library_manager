@@ -22,6 +22,16 @@ class ListBookView(TemplateView):
             books = BookRepository().get_all_books()
             serialized_books = BookSerializer(books, many=True)
             context['books'] = serialized_books.data
+
+            title = self.request.GET.get('title')
+
+            if title:
+                filters = {}
+                filters['title__icontains'] = title
+                books = BookRepository().filter_books(filters)
+                serializer = BookSerializer(books, many=True)
+                context['books'] = serializer.data
+
         except Http404:
             context['errors'] = 'Não foi possível encontrar os livros.'
         return context

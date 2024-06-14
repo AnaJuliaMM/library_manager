@@ -42,3 +42,7 @@ class BookRepository:
             book.delete()
             return True
         return False
+    
+    def filter_books(self, filters):
+        print(filters)
+        return BookModel.objects.filter(**filters)
