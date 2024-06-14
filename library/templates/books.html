@@ -70,7 +70,9 @@
       </header>
       {% block content %} {% endblock %}
       <section class="books-list-div">
-        {% for book in books %}
+        {% if errors %}
+        <div class="form-errors">{{ errors }}</div>
+        {% endif %} {% for book in books %}
         <div class="book-card">
           <div class="gender-menu-card">
             <div class="edit-delete-div">
@@ -148,9 +150,7 @@
             <div class="detail-div">
               <h4>Sinopse</h4>
               <hr />
-              <p>
-                {{book.synopsis}}
-              </p>
+              <p>{{book.synopsis}}</p>
             </div>
           </div>
           <input class="borrow-btn" type="button" value="Emprestar :)" />

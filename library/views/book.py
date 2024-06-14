@@ -1,3 +1,5 @@
+from django.forms import ValidationError
+from django.http import Http404
 from django.shortcuts import render, redirect,get_object_or_404
 from django.views.generic import TemplateView
 from django.views import View
@@ -16,9 +18,12 @@ class ListBookView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        books = BookRepository().get_all_books()
-        serialized_books = BookSerializer(books, many=True)
-        context['books'] = serialized_books.data
+        try:
+            books = BookRepository().get_all_books()
+            serialized_books = BookSerializer(books, many=True)
+            context['books'] = serialized_books.data
+        except Http404:
+            context['errors'] = 'Não foi possível encontrar os livros.'
         return context
 
 
@@ -55,8 +60,14 @@ class DeleteBookView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book_id = kwargs.get('pk')
-        book = get_object_or_404(BookModel, pk=book_id)
-        context['book'] = book
+        try:
+            book = get_object_or_404(BookModel, pk=book_id)
+            serializer = BookSerializer(book)
+            context['book'] = serializer.data
+        except Http404:
+            context['errors'] = 'O livro solicitado não existe.'
+        except ValidationError as e:
+            context['serializer_errors'] = e.detail
         return context
 
     def post(self, request, *args, **kwargs):
@@ -66,7 +77,7 @@ class DeleteBookView(TemplateView):
         if success:
             return redirect('books-list')
         return redirect('books-list')
-        # return HttpResponse(status=405)
+
 
 class EditBookView(TemplateView):
     template_name = 'updateBook.html'
@@ -74,16 +85,18 @@ class EditBookView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book_id = kwargs.get('pk')
-        book = get_object_or_404(BookModel, pk=book_id)
-
-        serializer = BookSerializer(book)
-        serialized_data = serializer.data
-        print(serialized_data)
-        form = BookForm(instance=book)
-        print(form)
-        context['book'] = serialized_data  
-        context['form'] = form
+        try:
+            book = get_object_or_404(BookModel, pk=book_id)
+            serializer = BookSerializer(book)
+            form = BookForm(instance=book)
+            context['book'] = serializer.data
+            context['form'] = form
+        except Http404:
+            context['errors'] = 'O livro solicitado não existe.'
+        except ValidationError as e:
+            context['serializer_errors'] = e.detail
         return context
+    
 
     def post(self, request, *args, **kwargs):
         book_id = kwargs.get('pk')
@@ -92,8 +105,13 @@ class EditBookView(TemplateView):
         if book:
             form = BookForm(request.POST, instance=book)
             if form.is_valid():
-                form.save()
-                return redirect('books-list')
+                try:
+                    form.save()
+                    return redirect('books-list')
+                except ValidationError as e:
+                    context = self.get_context_data(**kwargs)
+                    context['serializer_errors'] = e.detail
+                    context['form'] = form
+                    return self.render_to_response(context)
         return redirect('books-list')
-        # return HttpResponse(status=405)
  
