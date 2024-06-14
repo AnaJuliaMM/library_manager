@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atualizar Livro</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles_post.css' %}" />
+  </head>
+  <body>
+    <main class="post-record-div">
+      <h1>Atualizar Livro</h1>
+
+      <form action="{% url 'update-book' book.id %}" method="post">
+        {% csrf_token %} {% if serializer_errors %}
+        <div class="form-errors">
+          {% for field, errors in serializer_errors.items %}
+          <strong>{{ field }}:</strong>
+          <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endfor %}
+        </div>
+        {% endif %} {% if errors %}
+        <div class="form-errors">{{errors}}</div>
+        {% endif %} {% for field in form %}
+        <div class="form-field-div">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {% if field.name == 'publish_date' %}
+          <input
+            type="date"
+            name="{{ field.name }}"
+            value="{{book.publish_date}}"
+            required
+            id="{{ field.id_for_label }}"
+          />
+          {% else %} {{ field }} {% endif %} {% if field.errors %}
+          <div class="form-errors">{{ field.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="submit-btn">Confirmar</button>
+      </form>
+    </main>
+  </body>
+</html>

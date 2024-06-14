@@ -7,10 +7,11 @@ class BookModel(models.Model):
     author = models.CharField(max_length=150)
     publisher = models.CharField(max_length=150)
     gender = models.CharField(max_length=150)
+    pages = models.IntegerField()
     publish_date = models.DateField(null=True)
     checkin_date = models.DateField(auto_now_add=True)
+    synopsis = models.TextField(max_length=2000)
     is_available = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        status = "Disponível" if self.is_avaiable else "Reservado"
-        return f"{self.title} escrito por {self.author} (Publicado por {self.publisher} em {self.publish_date}) - {status.upper()}"
+        return f"{self.title}, escrito por {self.author} (Publicado por {self.publisher} em {self.publish_date})"
