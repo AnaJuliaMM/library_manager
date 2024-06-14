@@ -46,11 +46,14 @@ body {
   gap: 5px;
   width: 100%;
 }
-.post-record-div input {
-  height: 5vh;
+.post-record-div input, .post-record-div textarea {
   background-color: var(--white-hover);
   border: none;
   border-radius: 5px;
+  padding: 5px;
+}
+.post-record-div input{
+  height: 5vh;
 }
 .submit-btn {
   display: flex;
