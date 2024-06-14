@@ -12,8 +12,14 @@ from ..serializers.book import BookSerializer
 from ..forms.book import BookForm
 from ..repository import BookRepository
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 class ListBookView(TemplateView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     template_name = 'books.html'
 
     def get_context_data(self, **kwargs):
@@ -28,6 +34,9 @@ class ListBookView(TemplateView):
 
 
 class CreateBookView(TemplateView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     template_name = 'createBook.html'
 
     def get_context_data(self, **kwargs):
@@ -55,6 +64,9 @@ class CreateBookView(TemplateView):
 
 
 class DeleteBookView(TemplateView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     template_name = 'verifyDelete.html'
 
     def get_context_data(self, **kwargs):
@@ -80,6 +92,9 @@ class DeleteBookView(TemplateView):
 
 
 class EditBookView(TemplateView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     template_name = 'updateBook.html'
 
     def get_context_data(self, **kwargs):
