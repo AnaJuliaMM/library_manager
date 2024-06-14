@@ -28,8 +28,20 @@ class ListBookView(TemplateView):
             books = BookRepository().get_all_books()
             serialized_books = BookSerializer(books, many=True)
             context['books'] = serialized_books.data
-        except Http404:
-            context['errors'] = 'Não foi possível encontrar os livros.'
+
+            title = self.request.GET.get('title')
+
+            if title:
+                filters = {}
+                filters['title__icontains'] = title
+                books = BookRepository().filter_books(filters)
+                serializer = BookSerializer(books, many=True)
+                context['books'] = serializer.data
+
+        except ValidationError as e:
+            context['errors'] = e
+        except Exception as e:
+            context['errors'] = e
         return context
 
 
@@ -79,7 +91,7 @@ class DeleteBookView(TemplateView):
         except Http404:
             context['errors'] = 'O livro solicitado não existe.'
         except ValidationError as e:
-            context['serializer_errors'] = e.detail
+            context['serializer_errors'] = e
         return context
 
     def post(self, request, *args, **kwargs):
@@ -109,7 +121,7 @@ class EditBookView(TemplateView):
         except Http404:
             context['errors'] = 'O livro solicitado não existe.'
         except ValidationError as e:
-            context['serializer_errors'] = e.detail
+            context['serializer_errors'] = e
         return context
     
 
@@ -125,7 +137,7 @@ class EditBookView(TemplateView):
                     return redirect('books-list')
                 except ValidationError as e:
                     context = self.get_context_data(**kwargs)
-                    context['serializer_errors'] = e.detail
+                    context['serializer_errors'] = e
                     context['form'] = form
                     return self.render_to_response(context)
         return redirect('books-list')

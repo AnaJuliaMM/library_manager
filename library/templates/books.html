@@ -63,10 +63,16 @@
     <main>
       <header class="library-header">
         <h1>Acervo</h1>
-        <div class="filter-div">
-          <input type="text" name="filter" id="filter" />
-          <input type="button" value="Encontrar" />
-        </div>
+        <form action="{% url 'books-list' %}" method="GET" class="filter-div">
+          {% csrf_token %}
+          <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="Encontre um livro pelo título..."
+          />
+          <input type="submit" value="Encontrar" />
+        </form>
       </header>
       {% block content %} {% endblock %}
       <section class="books-list-div">
@@ -153,7 +159,6 @@
               <p>{{book.synopsis}}</p>
             </div>
           </div>
-          <input class="borrow-btn" type="button" value="Emprestar :)" />
         </div>
         {% endfor %}
       </section>
