@@ -24,18 +24,14 @@
             </div>
             {% if form.errors %}
                 <div class="errors">
-                    <p>Seu usuário e senha não bateram. Tente novamente.</p>
+                    <p style="color: white;">Seu usuário e senha não bateram. Tente novamente.</p>
                 </div>
             {% endif %}
             {% if next %}
                 {% if user.is_authenticated %}
-                    <div class="errors">
-                        <p>Sua conta não tem acesso a essa página. Para continuar, faça login com outra conta.</p>
-                    </div>
+                    <p style="color: white;">Sua conta não tem acesso a essa página. Para continuar, faça login com outra conta.</p>
                 {% else %}
-                    <div class="errors">
-                        <p>Por favor, faça login para acessar essa página.</p>
-                    </div>
+                    <p style="color: white;">Por favor, faça login para acessar essa página.</p>
                 {% endif %}
             {% endif %}
         </form>
