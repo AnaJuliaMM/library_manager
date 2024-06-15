@@ -60,10 +60,26 @@ class ListBookView(TemplateView):
 
 
 class CreateBookView(TemplateView):
+    template_name = 'createBook.html'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    template_name = 'createBook.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        for authenticator in self.authentication_classes:
+            try:
+                self.user, _ = authenticator().authenticate(request)
+                if self.user is not None:
+                    request.user = self.user
+                    break
+            except:
+                pass
+
+        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
+            return HttpResponseForbidden('Você não está autenticado!')
+
+        return super().dispatch(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,10 +106,24 @@ class CreateBookView(TemplateView):
 
 
 class DeleteBookView(TemplateView):
+    template_name = 'verifyDelete.html'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    template_name = 'verifyDelete.html'
+    def dispatch(self, request, *args, **kwargs):
+        for authenticator in self.authentication_classes:
+            try:
+                self.user, _ = authenticator().authenticate(request)
+                if self.user is not None:
+                    request.user = self.user
+                    break
+            except:
+                pass
+
+        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
+            return HttpResponseForbidden('Você não está autenticado!')
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -118,10 +148,25 @@ class DeleteBookView(TemplateView):
 
 
 class EditBookView(TemplateView):
+    template_name = 'updateBook.html'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    
-    template_name = 'updateBook.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        for authenticator in self.authentication_classes:
+            try:
+                self.user, _ = authenticator().authenticate(request)
+                if self.user is not None:
+                    request.user = self.user
+                    break
+            except:
+                pass
+
+        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
+            return HttpResponseForbidden('Você não está autenticado!')
+
+        return super().dispatch(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
