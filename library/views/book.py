@@ -1,5 +1,5 @@
 from django.forms import ValidationError
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect,get_object_or_404
 from django.views.generic import TemplateView
 from django.views import View
@@ -17,27 +17,69 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class ListBookView(TemplateView):
+    template_name = 'books.html'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    template_name = 'books.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.is_authenticated = False
+        for authenticator in self.authentication_classes:
+            try:
+                self.user, _ = authenticator().authenticate(request)
+                if self.user is not None:
+                    request.user = self.user
+                    self.is_authenticated = True
+                    break
+            except:
+                pass
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['is_authenticated'] = self.is_authenticated
         try:
             books = BookRepository().get_all_books()
             serialized_books = BookSerializer(books, many=True)
             context['books'] = serialized_books.data
-        except Http404:
-            context['errors'] = 'Não foi possível encontrar os livros.'
+
+            title = self.request.GET.get('title')
+
+            if title:
+                filters = {}
+                filters['title__icontains'] = title
+                books = BookRepository().filter_books(filters)
+                serializer = BookSerializer(books, many=True)
+                context['books'] = serializer.data
+
+        except ValidationError as e:
+            context['errors'] = e
+        except Exception as e:
+            context['errors'] = e
         return context
 
 
 class CreateBookView(TemplateView):
+    template_name = 'createBook.html'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    template_name = 'createBook.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        for authenticator in self.authentication_classes:
+            try:
+                self.user, _ = authenticator().authenticate(request)
+                if self.user is not None:
+                    request.user = self.user
+                    break
+            except:
+                pass
+
+        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
+            return HttpResponseForbidden('Você não está autenticado!')
+
+        return super().dispatch(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,10 +106,24 @@ class CreateBookView(TemplateView):
 
 
 class DeleteBookView(TemplateView):
+    template_name = 'verifyDelete.html'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    template_name = 'verifyDelete.html'
+    def dispatch(self, request, *args, **kwargs):
+        for authenticator in self.authentication_classes:
+            try:
+                self.user, _ = authenticator().authenticate(request)
+                if self.user is not None:
+                    request.user = self.user
+                    break
+            except:
+                pass
+
+        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
+            return HttpResponseForbidden('Você não está autenticado!')
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -79,7 +135,7 @@ class DeleteBookView(TemplateView):
         except Http404:
             context['errors'] = 'O livro solicitado não existe.'
         except ValidationError as e:
-            context['serializer_errors'] = e.detail
+            context['serializer_errors'] = e
         return context
 
     def post(self, request, *args, **kwargs):
@@ -92,10 +148,25 @@ class DeleteBookView(TemplateView):
 
 
 class EditBookView(TemplateView):
+    template_name = 'updateBook.html'
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    
-    template_name = 'updateBook.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        for authenticator in self.authentication_classes:
+            try:
+                self.user, _ = authenticator().authenticate(request)
+                if self.user is not None:
+                    request.user = self.user
+                    break
+            except:
+                pass
+
+        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
+            return HttpResponseForbidden('Você não está autenticado!')
+
+        return super().dispatch(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -109,7 +180,7 @@ class EditBookView(TemplateView):
         except Http404:
             context['errors'] = 'O livro solicitado não existe.'
         except ValidationError as e:
-            context['serializer_errors'] = e.detail
+            context['serializer_errors'] = e
         return context
     
 
@@ -125,7 +196,7 @@ class EditBookView(TemplateView):
                     return redirect('books-list')
                 except ValidationError as e:
                     context = self.get_context_data(**kwargs)
-                    context['serializer_errors'] = e.detail
+                    context['serializer_errors'] = e
                     context['form'] = form
                     return self.render_to_response(context)
         return redirect('books-list')
