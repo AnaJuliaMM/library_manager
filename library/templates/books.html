@@ -44,7 +44,7 @@
           <a href=""><li>Usuários</li></a>
           <a href=""><li>Registrar usuários</li></a>
           {% else %}
-          <a href=""><li>Entrar</li></a>
+          <a href="{% url 'login' %}"><li>Entrar</li></a>
           {% endif %}
         </ul>
       </div>
