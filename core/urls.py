@@ -8,6 +8,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('books/', include('library.urls')),
     path('api_token_auth/', authtoken_views.obtain_auth_token),
-    # path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/login/', CustomLoginView.as_view(), name='login'),
 ]
