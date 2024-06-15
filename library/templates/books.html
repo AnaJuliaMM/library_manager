@@ -38,11 +38,18 @@
         </figure>
         <ul class="nav-ul">
           <a href=""><li>Acervo</li></a>
+
+          {% if is_authenticated %}
           <a href="{% url 'create-book' %}"><li>Registrar livro</li></a>
           <a href=""><li>Usuários</li></a>
           <a href=""><li>Registrar usuários</li></a>
+          {% else %}
+          <a href=""><li>Entrar</li></a>
+          {% endif %}
         </ul>
       </div>
+
+      {% if is_authenticated %}
       <figure>
         <a href="">
           <svg
@@ -59,6 +66,7 @@
           </svg>
         </a>
       </figure>
+      {% endif %}
     </nav>
     <main>
       <header class="library-header">
@@ -81,6 +89,7 @@
         {% endif %} {% for book in books %}
         <div class="book-card">
           <div class="gender-menu-card">
+            {% if is_authenticated %}
             <div class="edit-delete-div">
               <figure>
                 <a href="{% url 'update-book' book.id %}">
@@ -121,6 +130,7 @@
                 </a>
               </figure>
             </div>
+            {% endif %}
             <p class="gender-p">{{book.gender}}</p>
           </div>
           <div class="book-card-header">
