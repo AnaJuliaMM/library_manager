@@ -34,5 +34,6 @@ class CustomUserRepository:
     def delete_user(user_instance):
         user_instance.delete()
 
-    def filter_user(self, filters):
+    @staticmethod
+    def filter_user(filters):
         return CustomUser.objects.filter(**filters)
