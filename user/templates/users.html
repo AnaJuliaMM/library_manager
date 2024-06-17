@@ -70,14 +70,14 @@
     </nav>
     <main>
       <header class="library-header">
-        <h1>Acervo</h1>
-        <form action="{% url 'books-list' %}" method="GET" class="filter-div">
+        <h1>Usuários</h1>
+        <form action="{% url 'users-list' %}" method="GET" class="filter-div">
           {% csrf_token %}
           <input
             type="text"
-            name="title"
-            id="title"
-            placeholder="Encontre um livro pelo título..."
+            name="name"
+            id="name"
+            placeholder="Encontre um usuário pelo nome..."
           />
           <input type="submit" value="Encontrar" />
         </form>
@@ -86,33 +86,13 @@
       <section class="books-list-div">
         {% if errors %}
         <div class="form-errors">{{ errors }}</div>
-        {% endif %} {% for book in books %}
+        {% endif %} {% for user in users %}
         <div class="book-card">
           <div class="gender-menu-card">
             {% if is_authenticated %}
             <div class="edit-delete-div">
               <figure>
-                <a href="{% url 'update-book' book.id %}">
-                  <svg
-                    width="21"
-                    height="21"
-                    viewBox="0 0 21 21"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M20.5998 4.24608L16.7472 0.393479C16.4939 0.14147 16.1512 0 15.7939 0C15.4366 0 15.0938 0.14147 14.8405 0.393479L12.6987 2.53526L18.4646 8.3011L20.6064 6.15932C20.7317 6.03334 20.831 5.88389 20.8985 5.71951C20.966 5.55513 21.0004 5.37905 20.9998 5.20134C20.9992 5.02364 20.9636 4.8478 20.8949 4.68388C20.8263 4.51996 20.726 4.37119 20.5998 4.24608Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M1.27171 13.9621L0.0310474 19.3166C-0.0117515 19.5123 -0.0102843 19.7152 0.0353416 19.9103C0.0809674 20.1054 0.1696 20.2878 0.294763 20.4442C0.419926 20.6007 0.57846 20.7272 0.758781 20.8146C0.939102 20.9019 1.13666 20.9478 1.33701 20.9491C1.43033 20.9592 1.52447 20.9592 1.6178 20.9491L7.0049 19.7084L17.3481 9.40433L11.5758 3.64502L1.27171 13.9621Z"
-                      fill="white"
-                    />
-                  </svg>
-                </a>
-              </figure>
-              <figure>
-                <a href="{% url 'delete-book' book.id %}">
+                <a href="{% url 'delete-user' user.id %}">
                   <svg
                     width="24"
                     height="18"
@@ -131,42 +111,16 @@
               </figure>
             </div>
             {% endif %}
-            <p class="gender-p">{{book.gender}}</p>
-          </div>
-          <div class="book-card-header">
-            <figure>
-              <svg
-                width="40"
-                viewBox="0 0 104 114"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M101.524 0H17.3333C12.7362 0 8.32745 1.6815 5.07682 4.67458C1.82619 7.66766 0 11.7271 0 15.96V111.72C0 112.325 0.260884 112.905 0.72526 113.332C1.18964 113.76 1.81946 114 2.47619 114H91.6191C92.2758 114 92.9056 113.76 93.37 113.332C93.8344 112.905 94.0952 112.325 94.0952 111.72C94.0952 111.115 93.8344 110.535 93.37 110.108C92.9056 109.68 92.2758 109.44 91.6191 109.44H4.95238V107.16C4.95238 104.137 6.2568 101.237 8.57868 99.099C10.9006 96.9611 14.0497 95.76 17.3333 95.76H101.524C102.181 95.76 102.81 95.5198 103.275 95.0922C103.739 94.6646 104 94.0847 104 93.48V2.28C104 1.67531 103.739 1.09538 103.275 0.667797C102.81 0.240214 102.181 0 101.524 0ZM99.0476 91.2H17.3333C15.0263 91.1993 12.7424 91.6235 10.6162 92.4477C8.48987 93.272 6.56416 94.4796 4.95238 95.9994V15.96C4.95238 12.9365 6.2568 10.0369 8.57868 7.89898C10.9006 5.76107 14.0497 4.56 17.3333 4.56H99.0476V91.2Z"
-                  fill="#F4ABD7"
-                />
-              </svg>
-            </figure>
-            <div class="book-title-div">
-              <h2>{{ book.title }}</h2>
-              <h4>{{ book.author }}</h4>
-            </div>
           </div>
           <div class="description-div">
             <div class="detail-div">
               <h4>Detalhes</h4>
               <hr />
               <ul>
-                <li>Páginas: {{book.pages}}</li>
-                <li>Editora: {{book.publisher}}</li>
-                <li>Data de Publicação: {{book.publish_date}}</li>
-                <li>Data de Registro: {{book.checkin_date}}</li>
+                <li>Nome: {{user.name}}</li>
+                <li>Usuário: {{user.username}}</li>
+                <li>Email: {{user.email}}</li>
               </ul>
-            </div>
-            <div class="detail-div">
-              <h4>Sinopse</h4>
-              <hr />
-              <p>{{book.synopsis}}</p>
             </div>
           </div>
         </div>

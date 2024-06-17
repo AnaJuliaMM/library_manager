@@ -1,23 +1,49 @@
 from django.forms import ValidationError
-from django.http import Http404
-from django.shortcuts import render, redirect,get_object_or_404
+from django.http import Http404, HttpResponseForbidden
+from django.shortcuts import redirect,get_object_or_404
 from django.views.generic import TemplateView
-from django.views import View
+from django.http import HttpRequest
+from typing import Any
 from django.http.response import HttpResponse
-from django.contrib import messages
-
 
 from ..models.book import BookModel
 from ..serializers.book import BookSerializer
 from ..forms.book import BookForm
 from ..repository import BookRepository
+from user.authentication import verify_token,get_authenticated_user
 
 
 class ListBookView(TemplateView):
     template_name = 'books.html'
+    is_authenticated = False
+    user = None
 
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
+
+        Args:
+            request (HttpRequest): Rrequisição
+
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            
+        except Exception as e:
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['is_authenticated'] = self.is_authenticated
         try:
             books = BookRepository().get_all_books()
             serialized_books = BookSerializer(books, many=True)
@@ -41,6 +67,33 @@ class ListBookView(TemplateView):
 
 class CreateBookView(TemplateView):
     template_name = 'createBook.html'
+    is_authenticated = False
+    user = None
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
+
+        Args:
+            request (HttpRequest): Rrequisição
+
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -68,6 +121,32 @@ class CreateBookView(TemplateView):
 
 class DeleteBookView(TemplateView):
     template_name = 'verifyDelete.html'
+    is_authenticated = False
+    user = None
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
+
+        Args:
+            request (HttpRequest): Rrequisição
+
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -93,6 +172,33 @@ class DeleteBookView(TemplateView):
 
 class EditBookView(TemplateView):
     template_name = 'updateBook.html'
+    is_authenticated = False
+    user = None
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
+
+        Args:
+            request (HttpRequest): Rrequisição
+
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
