@@ -2,35 +2,45 @@ from django.forms import ValidationError
 from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import redirect,get_object_or_404
 from django.views.generic import TemplateView
+from django.http import HttpRequest
+from typing import Any
+from django.http.response import HttpResponse
 
 from ..models.book import BookModel
 from ..serializers.book import BookSerializer
 from ..forms.book import BookForm
 from ..repository import BookRepository
-
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from user.authentication import verify_token,get_authenticated_user
 
 
 class ListBookView(TemplateView):
     template_name = 'books.html'
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    is_authenticated = False
+    user = None
 
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
 
-    def dispatch(self, request, *args, **kwargs):
-        self.is_authenticated = False
-        for authenticator in self.authentication_classes:
-            try:
-                self.user, _ = authenticator().authenticate(request)
-                if self.user is not None:
-                    request.user = self.user
-                    self.is_authenticated = True
-                    break
-            except:
-                pass
+        Args:
+            request (HttpRequest): Rrequisição
+
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            print(error_code)
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            
+        except Exception as e:
+            return self.get(request)
         return super().dispatch(request, *args, **kwargs)
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_authenticated'] = self.is_authenticated
@@ -57,23 +67,31 @@ class ListBookView(TemplateView):
 
 class CreateBookView(TemplateView):
     template_name = 'createBook.html'
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    is_authenticated = False
+    user = None
 
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
 
-    def dispatch(self, request, *args, **kwargs):
-        for authenticator in self.authentication_classes:
-            try:
-                self.user, _ = authenticator().authenticate(request)
-                if self.user is not None:
-                    request.user = self.user
-                    break
-            except:
-                pass
+        Args:
+            request (HttpRequest): Rrequisição
 
-        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
-            return HttpResponseForbidden('Você não está autenticado!')
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            print(error_code)
 
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -103,22 +121,31 @@ class CreateBookView(TemplateView):
 
 class DeleteBookView(TemplateView):
     template_name = 'verifyDelete.html'
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    is_authenticated = False
+    user = None
 
-    def dispatch(self, request, *args, **kwargs):
-        for authenticator in self.authentication_classes:
-            try:
-                self.user, _ = authenticator().authenticate(request)
-                if self.user is not None:
-                    request.user = self.user
-                    break
-            except:
-                pass
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
 
-        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
-            return HttpResponseForbidden('Você não está autenticado!')
+        Args:
+            request (HttpRequest): Rrequisição
 
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            print(error_code)
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -145,22 +172,31 @@ class DeleteBookView(TemplateView):
 
 class EditBookView(TemplateView):
     template_name = 'updateBook.html'
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    is_authenticated = False
+    user = None
 
-    def dispatch(self, request, *args, **kwargs):
-        for authenticator in self.authentication_classes:
-            try:
-                self.user, _ = authenticator().authenticate(request)
-                if self.user is not None:
-                    request.user = self.user
-                    break
-            except:
-                pass
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
 
-        if request.user is None or not any(perm().has_permission(request, self) for perm in self.permission_classes):
-            return HttpResponseForbidden('Você não está autenticado!')
+        Args:
+            request (HttpRequest): Rrequisição
 
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            print(error_code)
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
         return super().dispatch(request, *args, **kwargs)
 
 
