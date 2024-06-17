@@ -53,7 +53,6 @@ class ListUserView(TemplateView):
         try:
             token = request.COOKIES.get('jwt')
             error_code, _ = verify_token(token)
-            print(error_code)
 
             if error_code == 0:
                 user = get_authenticated_user(token)
@@ -104,7 +103,7 @@ class CreateUserView(TemplateView):
         try:
             token = request.COOKIES.get('jwt')
             error_code, _ = verify_token(token)
-            print(error_code)
+            
 
             if error_code == 0:
                 user = get_authenticated_user(token)

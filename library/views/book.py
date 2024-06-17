@@ -30,7 +30,7 @@ class ListBookView(TemplateView):
         try:
             token = request.COOKIES.get('jwt')
             error_code, _ = verify_token(token)
-            print(error_code)
+            
 
             if error_code == 0:
                 user = get_authenticated_user(token)
@@ -82,7 +82,7 @@ class CreateBookView(TemplateView):
         try:
             token = request.COOKIES.get('jwt')
             error_code, _ = verify_token(token)
-            print(error_code)
+            
 
             if error_code == 0:
                 user = get_authenticated_user(token)
@@ -136,7 +136,7 @@ class DeleteBookView(TemplateView):
         try:
             token = request.COOKIES.get('jwt')
             error_code, _ = verify_token(token)
-            print(error_code)
+            
 
             if error_code == 0:
                 user = get_authenticated_user(token)
@@ -187,7 +187,7 @@ class EditBookView(TemplateView):
         try:
             token = request.COOKIES.get('jwt')
             error_code, _ = verify_token(token)
-            print(error_code)
+            
 
             if error_code == 0:
                 user = get_authenticated_user(token)
