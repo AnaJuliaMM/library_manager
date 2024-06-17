@@ -11,7 +11,6 @@ from django.http import HttpResponseForbidden
 
 from .repository import CustomUserRepository
 from .serializers import *
-from .forms import UserForm
 
 # Login
 class LoginView(View):
