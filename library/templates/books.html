@@ -41,8 +41,8 @@
 
           {% if is_authenticated %}
           <a href="{% url 'create-book' %}"><li>Registrar livro</li></a>
-          <a href=""><li>Usuários</li></a>
-          <a href=""><li>Registrar usuários</li></a>
+          <a href="{% url 'users-list' %}"><li>Usuários</li></a>
+          <a href="{% url 'create-user' %}"><li>Registrar usuários</li></a>
           {% else %}
           <a href="{% url 'user-login' %}"><li>Entrar</li></a>
           {% endif %}
