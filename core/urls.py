@@ -6,9 +6,8 @@ from user.views import CustomLoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('books/', include('library.urls')),
+    path('', include('library.urls')),
     path('users/', include('user.urls')),
     path('api_token_auth/', authtoken_views.obtain_auth_token),
-    path('accounts/login/', CustomLoginView.as_view(), name='login'),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

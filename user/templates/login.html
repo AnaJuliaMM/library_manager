@@ -13,16 +13,22 @@
             <img src="{% static 'src/logo.png' %}" alt="logo de livros e brilhinho">
             <h1>Faça seu Login:</h1>
         </div>
-        <form method="post" action="{% url 'login' %}">
+        <form method="post" action="{% url 'user-login' %}">
             {% csrf_token %}
-            <div class="inputs">
-                {{ form.username }}
-                {{ form.password }}
+            <div class="form-field-div">
+                <div class="form-field-div">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-field-div">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
             </div>
             <div class="clickable">
                 <button type="submit">Entrar</button>
             </div>
-            {% if form.errors %}
+            {% if errors %}
                 <div class="errors">
                     <p style="color: white;">Seu usuário e senha não bateram. Tente novamente.</p>
                 </div>

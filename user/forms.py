@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from .models import CustomUser
 
 class UserForm(forms.ModelForm):
@@ -11,5 +12,14 @@ class UserForm(forms.ModelForm):
             'name': 'Nome completo',
             'username': 'Usuário',
             'email': 'E-mail',
+            'password': 'Senha'
+        }
+
+class CustomAuthenticationForm(AuthenticationForm):
+    class Meta:
+        model = CustomUser
+        fields = [ 'username', 'password']
+        labels = {
+            'username': 'Usuário',
             'password': 'Senha'
         }

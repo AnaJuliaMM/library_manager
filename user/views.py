@@ -1,28 +1,30 @@
 from django.forms import ValidationError
-from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm
-from django.views.generic import FormView
-from rest_framework.authtoken.models import Token
-from django.shortcuts import redirect
+from django.contrib.auth import login,authenticate
+from django.shortcuts import redirect,render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
+from django.views import View
 
 from .repository import CustomUserRepository
-from .serializers import CustomUserSerializer
+from .serializers import *
 from .forms import UserForm
 
 # Login
-class CustomLoginView(FormView):
-    form_class = AuthenticationForm
-    template_name = 'login.html'
-    success_url = reverse_lazy('books-list')  
+class CustomLoginView(View):
+    def get(self, request):
+        return render(request, 'login.html')
 
-    def form_valid(self, form):
-        user = form.get_user()
-        login(self.request, user)
-        token, created = Token.objects.get_or_create(user=user)
-        return redirect(self.get_success_url())
-
+    def post(self, request):
+        serializer = LoginSerializer(data=request.POST)
+        if serializer.is_valid():
+            print(serializer.data)
+            user = serializer.validated_data['user']
+            print(user)
+            login(request, user)
+            return redirect('books-list')   
+        print(serializer.errors)
+        return render(request, 'login.html', {'errors': 'Credenciais inválidas. Tente novamente.'})
+    
 class ListUserView(TemplateView):
     template_name = 'users.html'
 
