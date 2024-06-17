@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken import views as authtoken_views
-from user.views import CustomLoginView
 
 
 urlpatterns = [
