@@ -1,32 +1,69 @@
 from django.forms import ValidationError
 from django.contrib.auth import login,authenticate
 from django.shortcuts import redirect,render
-from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.views import View
+from .authentication import *
+from typing import Any
+from django.http.response import HttpResponse
+from django.http import HttpRequest
+from django.http import HttpResponseForbidden
 
 from .repository import CustomUserRepository
 from .serializers import *
 from .forms import UserForm
 
 # Login
-class CustomLoginView(View):
+class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
 
     def post(self, request):
-        serializer = LoginSerializer(data=request.POST)
-        if serializer.is_valid():
-            print(serializer.data)
-            user = serializer.validated_data['user']
-            print(user)
-            login(request, user)
-            return redirect('books-list')   
-        print(serializer.errors)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user:
+            token = generate_token(user)
+            response = redirect('books-list')
+            response.set_cookie('jwt', token)
+            return response
         return render(request, 'login.html', {'errors': 'Credenciais inválidas. Tente novamente.'})
+
+class LogoutView(View):
+    def get(self, request):
+        response = redirect('books-list')
+        response.delete_cookie('jwt')
+        return response
     
 class ListUserView(TemplateView):
     template_name = 'users.html'
+    is_authenticated = False
+    user = None
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
+
+        Args:
+            request (HttpRequest): Rrequisição
+
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            print(error_code)
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -52,6 +89,32 @@ class ListUserView(TemplateView):
     
 class CreateUserView(TemplateView):
     template_name = 'createUser.html'
+    is_authenticated = False
+    user = None
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
+
+        Args:
+            request (HttpRequest): Rrequisição
+
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            print(error_code)
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
