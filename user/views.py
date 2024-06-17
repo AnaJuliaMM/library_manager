@@ -1,18 +1,17 @@
 from django.forms import ValidationError
 from django.contrib.auth import login,authenticate
-from django.shortcuts import redirect,render
+from django.shortcuts import redirect,render,get_object_or_404
 from django.views.generic import TemplateView
 from django.views import View
 from .authentication import *
 from typing import Any
 from django.http.response import HttpResponse
-from django.http import HttpRequest
-from django.http import HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden,HttpRequest
+
 
 from .repository import CustomUserRepository
-from .serializers import *
+from .serializers import CustomUserSerializer
 
-# Login
 class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
@@ -65,7 +64,7 @@ class ListUserView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['is_authenticated'] = self.is_authenticated
+        context['is_authenticated'] = self.is_authenticated
         try:
             books = CustomUserRepository().get_all_users()
             serializer = CustomUserSerializer(books, many=True)
@@ -136,3 +135,54 @@ class CreateUserView(TemplateView):
         context['form'] = form
         context['errors'] = form.errors 
         return self.render_to_response(context)
+
+class DeleteUserView(TemplateView):
+    template_name = 'verifyDeleteUser.html'
+    is_authenticated = False
+    user = None
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
+
+        Args:
+            request (HttpRequest): Rrequisição
+
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
+            
+
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = kwargs.get('pk')
+        try:
+            user = get_object_or_404(CustomUser, pk=user_id)
+            serializer = CustomUserSerializer(user)
+            context['users'] = serializer.data
+        except Http404:
+            context['errors'] = 'O usuário solicitado não existe.'
+        except ValidationError as e:
+            context['serializer_errors'] = e
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user_id = kwargs.get('pk')
+        repository = CustomUserRepository()
+        user = repository.filter_user({"id": user_id})
+        success = repository.delete_user(user)
+        if success:
+            return redirect('users-list')
+        return redirect('users-list')

@@ -41,8 +41,8 @@
 
           {% if is_authenticated %}
           <a href="{% url 'create-book' %}"><li>Registrar livro</li></a>
-          <a href=""><li>Usuários</li></a>
-          <a href=""><li>Registrar usuários</li></a>
+          <a href="{% url 'users-list' %}"><li>Usuários</li></a>
+          <a href="{% url 'create-user' %}"><li>Registrar usuários</li></a>
           {% else %}
           <a href="{% url 'user-login' %}"><li>Entrar</li></a>
           {% endif %}
@@ -51,7 +51,7 @@
 
       {% if is_authenticated %}
       <figure>
-        <a href="">
+        <a href="{% url 'user-logout' %}">
           <svg
             width="30"
             height="30"
@@ -92,27 +92,7 @@
             {% if is_authenticated %}
             <div class="edit-delete-div">
               <figure>
-                <a href="{% url 'update-book' book.id %}">
-                  <svg
-                    width="21"
-                    height="21"
-                    viewBox="0 0 21 21"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M20.5998 4.24608L16.7472 0.393479C16.4939 0.14147 16.1512 0 15.7939 0C15.4366 0 15.0938 0.14147 14.8405 0.393479L12.6987 2.53526L18.4646 8.3011L20.6064 6.15932C20.7317 6.03334 20.831 5.88389 20.8985 5.71951C20.966 5.55513 21.0004 5.37905 20.9998 5.20134C20.9992 5.02364 20.9636 4.8478 20.8949 4.68388C20.8263 4.51996 20.726 4.37119 20.5998 4.24608Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M1.27171 13.9621L0.0310474 19.3166C-0.0117515 19.5123 -0.0102843 19.7152 0.0353416 19.9103C0.0809674 20.1054 0.1696 20.2878 0.294763 20.4442C0.419926 20.6007 0.57846 20.7272 0.758781 20.8146C0.939102 20.9019 1.13666 20.9478 1.33701 20.9491C1.43033 20.9592 1.52447 20.9592 1.6178 20.9491L7.0049 19.7084L17.3481 9.40433L11.5758 3.64502L1.27171 13.9621Z"
-                      fill="white"
-                    />
-                  </svg>
-                </a>
-              </figure>
-              <figure>
-                <a href="{% url 'delete-book' book.id %}">
+                <a href="{% url 'delete-user' user.id %}">
                   <svg
                     width="24"
                     height="18"
