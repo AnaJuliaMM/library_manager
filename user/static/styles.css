@@ -241,6 +241,10 @@ main {
 .book-record {
   font-weight: 700;
 }
+.login-form{
+  display: flex;
+  flex-direction: column;
+}
 .login-form label{
   color: #a1a1a1;
 }

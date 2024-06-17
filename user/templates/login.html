@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="{% static 'login.css' %}">
 </head>
 <body>
@@ -13,7 +14,7 @@
             <img src="{% static 'src/logo.png' %}" alt="logo de livros e brilhinho">
             <h1>Faça seu Login:</h1>
         </div>
-        <form method="post" action="{% url 'user-login' %}">
+        <form method="post" action="{% url 'user-login' %}" style="color: azure;">
             {% csrf_token %}
             <div class="form-field-div">
                 <div class="form-field-div">
