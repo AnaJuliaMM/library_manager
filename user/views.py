@@ -87,32 +87,32 @@ class ListUserView(TemplateView):
     
 class CreateUserView(TemplateView):
     template_name = 'createUser.html'
-    # is_authenticated = False
-    # user = None
+    is_authenticated = False
+    user = None
 
-    # def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-    #     """Função que intercepta a requisição
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Função que intercepta a requisição
 
-    #     Args:
-    #         request (HttpRequest): Rrequisição
+        Args:
+            request (HttpRequest): Rrequisição
 
-    #     Returns:
-    #         HttpResponse: redirecionamento
-    #     """
-    #     try:
-    #         token = request.COOKIES.get('jwt')
-    #         error_code, _ = verify_token(token)
+        Returns:
+            HttpResponse: redirecionamento
+        """
+        try:
+            token = request.COOKIES.get('jwt')
+            error_code, _ = verify_token(token)
             
 
-    #         if error_code == 0:
-    #             user = get_authenticated_user(token)
-    #             self.user = user
-    #             self.is_authenticated = True
-    #         else:
-    #             return HttpResponseForbidden('Você não está autenticado!')
-    #     except Exception as e:
-    #         return self.get(request)
-    #     return super().dispatch(request, *args, **kwargs)
+            if error_code == 0:
+                user = get_authenticated_user(token)
+                self.user = user
+                self.is_authenticated = True
+            else:
+                return HttpResponseForbidden('Você não está autenticado!')
+        except Exception as e:
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
