@@ -16,13 +16,12 @@ A arquitetura MVT, combinada com o padrão de arquitetura Repository, separa uma
 No sistema de gestão de biblioteca, o Model manipula usuários e livros, os Templates definem a apresentação das páginas ao usuário, e os Repositories coordenam a interação entre o Model e o banco de dados, facilitando as operações de CRUD (Criar, Ler, Atualizar, Deletar). As Views utilizam esses Templates para renderizar a interface, combinando dados do Modelo com o layout definido.
 
 ## Funcionalidades
-***SuperUser:***
+***Usuário Autenticado:***
 - Livros: Registrar, editar, deletar, listar
 - Usuários: Registrar, editar, deletar, listar
 
-***User:***
+***Vistante:***
 - Listar o acervo de livros
-- Visualizar se os livros estão reservados ou não
 
 
 ## Especificações Técnicas
@@ -32,7 +31,7 @@ No sistema de gestão de biblioteca, o Model manipula usuários e livros, os Tem
 - ***Tipo de API:*** RESTful API
 
 
-## Modelagem do Banco de dados (🟡 EM PROGRESSO)
+## Modelagem do Banco de dados 
 ***User***
 - *superusuário:* Indica se o usuário tem permissões de superusuário.
 - *campos comuns:* id, name, email, password.
